@@ -2,15 +2,19 @@ describe('Verify whether successful login', () => {
 
   it('Login with valid credentials', () => {
 
-    cy.visit('https://www.saucedemo.com/')
+    cy.fixture('loginData').then((data) => {
 
-    cy.get('input[id="user-name"]').type('standard_user')
+      cy.visit('https://www.saucedemo.com/')
 
-    cy.get('input[id="password"]').type('secret_sauce')
+      cy.get('input[id="user-name"]').type(data.username)
 
-    cy.get('input[type="submit"]').click()
+      cy.get('input[id="password"]').type(data.password)
 
-    cy.contains('Products').should('be.visible')
+      cy.get('input[type="submit"]').click()
+
+      cy.contains('Products').should('be.visible')
+
+    })
 
   })
 
