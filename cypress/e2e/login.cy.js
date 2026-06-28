@@ -1,4 +1,4 @@
-describe('Login Test', () => {
+describe('Verify whether successful login', () => {
 
   it('Login with valid credentials', () => {
 
