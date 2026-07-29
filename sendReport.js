@@ -1,63 +1,107 @@
 const nodemailer = require("nodemailer");
+const archiver = require("archiver");
 const fs = require("fs");
 
 
-// Read Cypress HTML report
-const report = fs.readFileSync(
-    "./cypress/reports/html/index.html",
-    "utf8"
-);
+function createZip() {
+
+    return new Promise((resolve, reject) => {
+
+        const output = fs.createWriteStream("Cypress-Test-Report.zip");
+
+        const archive = archiver("zip", {
+            zlib: { level: 9 }
+        });
 
 
-const transporter = nodemailer.createTransport({
-
-    service: "gmail",
-
-    auth: {
-
-        user: process.env.EMAIL,
-
-        pass: process.env.EMAIL_PASSWORD
-
-    }
-
-});
+        output.on("close", () => {
+            console.log("ZIP created");
+            resolve();
+        });
 
 
-const mailOptions = {
-
-    from: process.env.EMAIL,
-
-    to: process.env.EMAIL,
-
-    subject: "Cypress Automation Test Report",
-
-    html: `
-        <h2>Cypress Test Execution Report</h2>
-
-        <p>
-        Cypress automation execution has completed.
-        Please find the report below.
-        </p>
-
-        ${report}
-    `
-
-};
+        archive.on("error", (error) => {
+            reject(error);
+        });
 
 
-transporter.sendMail(mailOptions, (error, info) => {
+        archive.pipe(output);
 
 
-    if (error) {
-
-        console.log("Email failed:", error);
-
-        process.exit(1);
-
-    }
+        archive.directory(
+            "cypress/reports/html",
+            false
+        );
 
 
-    console.log("Email sent successfully");
+        archive.finalize();
 
-});
+    });
+
+}
+
+
+
+async function sendEmail() {
+
+
+    await createZip();
+
+
+    const transporter = nodemailer.createTransport({
+
+        service: "gmail",
+
+        auth: {
+
+            user: process.env.EMAIL,
+
+            pass: process.env.EMAIL_PASSWORD
+
+        }
+
+    });
+
+
+
+    const mailOptions = {
+
+        from: process.env.EMAIL,
+
+        to: process.env.EMAIL,
+
+        subject: "Cypress Automation Test Report",
+
+        text: `
+Cypress automation execution completed.
+
+Please download the attached ZIP file.
+Extract it and open index.html in your browser.
+        `,
+
+
+        attachments: [
+
+            {
+
+                filename: "Cypress-Test-Report.zip",
+
+                path: "./Cypress-Test-Report.zip"
+
+            }
+
+        ]
+
+    };
+
+
+    await transporter.sendMail(mailOptions);
+
+
+    console.log("Report email sent successfully");
+
+}
+
+
+
+sendEmail();
