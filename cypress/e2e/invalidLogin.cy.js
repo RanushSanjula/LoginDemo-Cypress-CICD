@@ -2,7 +2,7 @@ describe('Verify invalid login', () => {
 
   it('Login with invalid credentials', () => {
 
-    cy.fixture('invalidLoginData').then((data) => {
+    cy.fixture('').then((data) => {
 
       cy.visit('https://www.saucedemo.com/')
 
