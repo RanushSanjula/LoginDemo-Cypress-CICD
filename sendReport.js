@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const archiver = require("archiver").default;
+const archiver = require("archiver");
 const fs = require("fs");
 
 
@@ -9,19 +9,24 @@ function createZip() {
 
         const output = fs.createWriteStream("Cypress-Test-Report.zip");
 
-        const archive = archiver("zip", {
+        const archive = archiver.create("zip", {
             zlib: { level: 9 }
         });
 
 
         output.on("close", () => {
-            console.log("ZIP created");
+
+            console.log("ZIP created successfully");
+
             resolve();
+
         });
 
 
-        archive.on("error", (error) => {
-            reject(error);
+        archive.on("error", (err) => {
+
+            reject(err);
+
         });
 
 
@@ -44,7 +49,6 @@ function createZip() {
 
 async function sendEmail() {
 
-
     await createZip();
 
 
@@ -63,7 +67,6 @@ async function sendEmail() {
     });
 
 
-
     const mailOptions = {
 
         from: process.env.EMAIL,
@@ -72,22 +75,19 @@ async function sendEmail() {
 
         subject: "Cypress Automation Test Report",
 
-        text: `
-Cypress automation execution completed.
+        text:
+        `
+Cypress test execution completed.
 
-Please download the attached ZIP file.
-Extract it and open index.html in your browser.
+Please find the attached ZIP report.
+Extract the ZIP file and open index.html.
         `,
-
 
         attachments: [
 
             {
-
                 filename: "Cypress-Test-Report.zip",
-
                 path: "./Cypress-Test-Report.zip"
-
             }
 
         ]
@@ -98,10 +98,9 @@ Extract it and open index.html in your browser.
     await transporter.sendMail(mailOptions);
 
 
-    console.log("Report email sent successfully");
+    console.log("Email sent successfully");
 
 }
-
 
 
 sendEmail();
