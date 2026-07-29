@@ -20,7 +20,7 @@ describe('Verify invalid login', () => {
 
 
       cy.contains(
-        'Epic sadface: Username and password do not match any user in this servide'
+        'Epic sadface: Username and password do not match any user in this service'
       )
       .should('be.visible')
 
