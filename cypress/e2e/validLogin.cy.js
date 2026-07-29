@@ -6,9 +6,9 @@ describe('Verify whether successful login', () => {
 
       cy.visit('https://www.saucedemo.com/')
 
-      cy.get('input[id="user-name"]').type(data.username)
+      cy.get('input[id="user-name"]').type(data[0].username)
 
-      cy.get('input[id="password"]').type(data.password)
+      cy.get('input[id="password"]').type(data[0].password)
 
       cy.get('input[type="submit"]').click()
 
