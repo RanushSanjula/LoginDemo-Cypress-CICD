@@ -5,13 +5,9 @@ on:
     branches:
       - main
 
-
 jobs:
-
   test:
-
     runs-on: ubuntu-latest
-
 
     steps:
 
@@ -30,32 +26,17 @@ jobs:
 
 
       - name: Run Cypress test
-        if: always()
         run: npx cypress run
 
 
-      - name: Check Cypress Reports
+      - name: Merge Cypress Reports
         if: always()
-        run: |
-          ls -R cypress/reports || true
-
-
-      - name: Merge Reports
-        if: always()
-        run: |
-          npx mochawesome-merge cypress/reports/*.json > cypress/reports/report.json
+        run: npx mochawesome-merge cypress/reports/*.json -o cypress/reports/report.json
 
 
       - name: Generate HTML Report
         if: always()
-        run: |
-          npx marge cypress/reports/report.json --reportDir cypress/reports/html --inline
-
-
-      - name: Check Generated Report
-        if: always()
-        run: |
-          ls -R cypress/reports/html
+        run: npx marge cypress/reports/report.json -f index -o cypress/reports/html
 
 
       - name: Upload Cypress Report
