@@ -1,5 +1,5 @@
 const nodemailer = require("nodemailer");
-const archiver = require("archiver");
+const archiver = require("archiver").default;
 const fs = require("fs");
 
 
