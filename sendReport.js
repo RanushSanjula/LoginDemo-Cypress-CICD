@@ -15,7 +15,7 @@ const mailOptions = {
     text: "Please find the attached Cypress test report.",
     attachments: [
         {
-            filename: "Cypress_Report.html",
+            filename: "report.html",
             path: "./cypress/reports/html/index.html"
         }
     ]
