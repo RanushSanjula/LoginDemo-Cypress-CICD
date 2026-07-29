@@ -28,7 +28,7 @@
     "mochawesome-report-generator": "^6.3.2"
   },
   "dependencies": {
-    "archiver": "^8.0.0",
+    "adm-zip": "^0.6.0",
     "nodemailer": "^9.0.3"
   }
 }
