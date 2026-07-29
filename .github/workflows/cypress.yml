@@ -10,16 +10,46 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
       - name: Checkout code
         uses: actions/checkout@v4
+
 
       - name: Install Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
+
       - name: Install dependencies
         run: npm install
 
+
       - name: Run Cypress test
         run: npx cypress run
+
+
+      - name: Merge Cypress Reports
+        if: always()
+        run: npx mochawesome-merge cypress/reports/*.json -o cypress/reports/report.json
+
+
+      - name: Generate HTML Report
+        if: always()
+        run: npx marge cypress/reports/report.json -f index -o cypress/reports/html
+
+
+      - name: Upload Cypress Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Cypress-Test-Report
+          path: cypress/reports/html
+
+
+      - name: Send Report Email
+        if: always()
+        env:
+          EMAIL: ${{ secrets.EMAIL }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+        run: node sendReport.js

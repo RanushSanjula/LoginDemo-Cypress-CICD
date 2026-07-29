@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "cypress run"
+    "test": "cypress run",
+    "cy:run": "cypress run",
+    "merge-reports": "npx mochawesome-merge cypress/reports/*.json > cypress/reports/report.json",
+    "generate-report": "npx marge cypress/reports/report.json -f index -o cypress/reports/html"
   },
   "repository": {
     "type": "git",
@@ -19,6 +22,12 @@
   },
   "homepage": "https://github.com/RanushSanjula/LoginDemo-Cypress-CICD#readme",
   "devDependencies": {
-    "cypress": "^15.18.0"
+    "cypress": "^15.18.0",
+    "mochawesome": "^7.1.4",
+    "mochawesome-merge": "^5.1.1",
+    "mochawesome-report-generator": "^6.3.2"
+  },
+  "dependencies": {
+    "nodemailer": "^9.0.3"
   }
 }
