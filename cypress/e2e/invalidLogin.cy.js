@@ -1,6 +1,6 @@
-describe('Verify invalid login', () => {
+describe('Login Functionality', () => {
 
-  it('Login with invalid credentials', () => {
+  it('User should not be able to log in with invalid credentials', () => {
 
     cy.fixture('loginData').then((data) => {
 
